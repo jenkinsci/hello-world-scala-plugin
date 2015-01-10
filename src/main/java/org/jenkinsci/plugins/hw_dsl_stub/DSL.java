@@ -19,8 +19,13 @@ public class DSL extends org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Step{
         return "Add a Hello World build step";
     }
 
-    @Method(name="helloWorld", description="Add a helloWorld step")
-    public Object helloWorld(@Parameter(name="name", description="The name to use in the hello world step") String name) {
+    @Override
+    public final boolean hasMethods(){
+        return true;
+    };
+
+    @Method(description="Add a helloWorld step")
+    public Object helloWorld(@Parameter(description="The name to use in the hello world step") String name) {
         return new HelloWorldBuilder(name);
     }
 
