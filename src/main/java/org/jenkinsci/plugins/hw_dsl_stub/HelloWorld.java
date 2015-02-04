@@ -2,6 +2,7 @@ package org.jenkinsci.plugins.hw_dsl_stub;
 
 import groovy.lang.Closure;
 import org.jenkinsci.plugins.jobdsl.stub.DslClosureUnsupported;
+import org.jenkinsci.plugins.jobdsl.stub.DslNoClosureClass;
 import org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Method;
 import org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Parameter;
 import org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Step;
@@ -26,21 +27,16 @@ public class HelloWorld extends org.jenkinsci.plugins.jobdsl.stub.annotations.ds
         return true;
     };
 
-    @Override
-    public Object getClosureDelegate() {
-        return new HelloWorldClosure();
-    }
-
     @Method(description="Add a helloWorld step")
     public Object helloWorld(@Parameter(description="The name to use in the hello world step") String name) {
         return new HelloWorldBuilder(name);
     }
 
-    @Method(description="Add a helloWorld step with a closure")
+    @Method(description="Add a helloWorld step with a closure", closureClass = HelloWorldClosure.class)
     public Object helloWorld(@Parameter(description="The name to use in the hello world step") Object closure)
-            throws DslClosureUnsupported, IllegalAccessException, InstantiationException
+            throws DslClosureUnsupported, DslNoClosureClass, IllegalAccessException, InstantiationException
     {
-        HelloWorldClosure i = (HelloWorldClosure) runClosure(closure);
+        HelloWorldClosure i = (HelloWorldClosure) runClosure(closure, HelloWorldClosure.class);
         return new HelloWorldBuilder(i.getWho());
     }
 }
