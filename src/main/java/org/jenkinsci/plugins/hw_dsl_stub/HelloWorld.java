@@ -33,7 +33,7 @@ public class HelloWorld extends org.jenkinsci.plugins.jobdsl.stub.annotations.ds
     }
 
     @Method(description="Add a helloWorld step with a closure", closureClass = HelloWorldClosure.class)
-    public Object helloWorld(@Parameter(description="The name to use in the hello world step") Object closure)
+    public Object helloWorld(@Parameter(description="The closure") Object closure)
             throws DslClosureUnsupported, DslNoClosureClass, IllegalAccessException, InstantiationException
     {
         HelloWorldClosure i = (HelloWorldClosure) runClosure(closure, HelloWorldClosure.class);
