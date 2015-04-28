@@ -5,13 +5,13 @@ import org.jenkinsci.plugins.jobdsl.stub.DslClosureUnsupported;
 import org.jenkinsci.plugins.jobdsl.stub.DslNoClosureClass;
 import org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Method;
 import org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Parameter;
-import org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Step;
+import org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Builder;
 import hudson.Extension;
 /**
  * Created by jeremymarshall on 1/01/2015.
  */
 @Extension
-public class HelloWorld extends org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Step{
+public class HelloWorld extends org.jenkinsci.plugins.jobdsl.stub.annotations.dsl.Builder{
     @Override
     public String getName(){
         return "helloWorld";
