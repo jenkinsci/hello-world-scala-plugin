@@ -1,59 +1,55 @@
-/*
-package p
+package org.jenkinsci.plugins.hw_dsl_stub
 
-import akka.actor.{ ActorRef, ActorSystem, Props, Actor, Inbox }
-import scala.concurrent.duration._
+import hudson.Launcher
+import hudson.Extension
+import hudson.util.FormValidation
+import hudson.model.AbstractBuild
+import hudson.model.BuildListener
+import net.sf.json.JSONObject
+import org.kohsuke.stapler.DataBoundConstructor
+import org.kohsuke.stapler.StaplerRequest
+import org.kohsuke.stapler.QueryParameter
+import javax.servlet.ServletException
+import java.io.IOException
+import org.jenkinsci.plugins.scala.stub.BuilderAdapter
+import org.jenkinsci.plugins.scala.stub.BuildDescriptorAdapter
+import HelloWorldBuilder._
+import scala.reflect.{BeanProperty, BooleanBeanProperty}
+//remove if not needed
+import scala.collection.JavaConversions._
 
-case object Greet
-case class WhoToGreet(who: String)
-case class Greeting(message: String)
+object HelloWorldBuilder {
 
-class Greeter extends Actor {
-	var greeting = ""
+  @Extension
+  class DescriptorImpl extends BuildDescriptorAdapter {
 
-	def receive = {
-		case WhoToGreet(who) => greeting = s"hello, $who"
-		case Greet           => sender ! Greeting(greeting) // Send the current greeting back to the sender
-	}
+    @BeanProperty
+    var useFrench: Boolean = _
+
+    def doCheckName(@QueryParameter value: String): FormValidation = {
+      if (value.length == 0) return FormValidation.error("Please set a name")
+      if (value.length < 4) return FormValidation.warning("Isn't the name too short?")
+      FormValidation.ok()
+    }
+
+    def getDisplayName(): String = "Say hello world"
+
+    override def configure(req: StaplerRequest, formData: JSONObject): Boolean = {
+      useFrench = formData.getBoolean("useFrench")
+      super.configure(req, formData)
+    }
+  }
 }
 
-object HelloWorld extends App {
+class HelloWorldBuilder@DataBoundConstructor
+(@BeanProperty val name: String) extends BuilderAdapter {
 
-	// Create the 'helloakka' actor system
-	val system = ActorSystem("helloakka")
+  override def scala_perform(build: AbstractBuild, launcher: Launcher, listener: BuildListener): Boolean = {
+    if (getDescriptor.getUseFrench) listener.getLogger.println("Bonjour, " + name + "!") else listener.getLogger.println("Hello, " + name + "!")
+    true
+  }
 
-	// Create the 'greeter' actor
-	val greeter = system.actorOf(Props[Greeter], "greeter")
-
-	// Create an "actor-in-a-box"
-	val inbox = Inbox.create(system)
-
-	// Tell the 'greeter' to change its 'greeting' message
-	greeter.tell(WhoToGreet("akka"), ActorRef.noSender)
-
-	// Ask the 'greeter for the latest 'greeting'
-	// Reply should go to the "actor-in-a-box"
-	inbox.send(greeter, Greet)
-
-	// Wait 5 seconds for the reply with the 'greeting' message
-	val Greeting(message1) = inbox.receive(5.seconds)
-	println(s"Greeting: $message1")
-
-	// Change the greeting and ask for it again
-	greeter.tell(WhoToGreet("lightbend"), ActorRef.noSender)
-	inbox.send(greeter, Greet)
-	val Greeting(message2) = inbox.receive(5.seconds)
-	println(s"Greeting: $message2")
-
-	val greetPrinter = system.actorOf(Props[GreetPrinter])
-	// after zero seconds, send a Greet message every second to the greeter with a sender of the greetPrinter
-	system.scheduler.schedule(0.seconds, 1.second, greeter, Greet)(system.dispatcher, greetPrinter)
-
+  override def getDescriptor(): DescriptorImpl = {
+    super.getDescriptor.asInstanceOf[DescriptorImpl]
+  }
 }
-
-// prints a greeting
-class GreetPrinter extends Actor {
-	def receive = {
-		case Greeting(message) => println(message)
-	}
-}*/
