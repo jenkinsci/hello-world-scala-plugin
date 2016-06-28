@@ -9,6 +9,7 @@ import org.kohsuke.stapler.StaplerRequest;
 
 public  abstract class BuildDescriptorAdapter extends BuildStepDescriptor<Builder> {
 
+    @Override
     public boolean isApplicable(Class<? extends AbstractProject> aClass) {
         // Indicates that this builder can be used with all kinds of project types
         return true;
