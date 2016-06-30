@@ -1,20 +1,35 @@
-package org.jenkinsci.plugins.hw_dsl_stub
+package org.jenkinsci.plugins.hw_scala
 
 import hudson.Launcher
 import hudson.Extension
-import hudson.util.FormValidation
 import hudson.model.FreeStyleBuild
+import hudson.util.FormValidation
 import hudson.model.BuildListener
 import net.sf.json.JSONObject
+import org.jenkinsci.plugins.hw_scala.original.HelloWorldJava.DescriptorImpl
 import org.kohsuke.stapler.DataBoundConstructor
 import org.kohsuke.stapler.StaplerRequest
 import org.kohsuke.stapler.QueryParameter
+
 import org.jenkinsci.plugins.scala.stub.BuilderAdapter
 import org.jenkinsci.plugins.scala.stub.BuildDescriptorAdapter
 import scala.beans.{BeanProperty, BooleanBeanProperty}
 
-object HelloWorldBuilder {
+class HelloWorldBuilder@DataBoundConstructor
+(@BeanProperty val name: String) extends BuilderAdapter {
+  override def scala_perform(build: FreeStyleBuild, launcher: Launcher, listener: BuildListener): Boolean = {
+    if (getDescriptor.getUseFrench) listener.getLogger.println("Bonjour, " + name + "!") else listener.getLogger.println("Hello, " + name + "!")
+    true
+  }
+  //override def getDescriptor(): DescriptorImpl = {
+  //  super.getDescriptor.asInstanceOf[DescriptorImpl]
+  //}
+  override def getDescriptor(): DescriptorImpl = {
+    super.getDescriptor.asInstanceOf[DescriptorImpl]
+  }
+}
 
+object HelloWorldBuilder {
   @Extension
   class DescriptorImpl extends BuildDescriptorAdapter {
 
@@ -27,24 +42,11 @@ object HelloWorldBuilder {
       FormValidation.ok()
     }
 
-    override def getDisplayName(): String = "Say hello world"
+    def getDisplayName(): String = "Say hello world"
 
     override def configure(req: StaplerRequest, formData: JSONObject): Boolean = {
       useFrench = formData.getBoolean("useFrench")
       super.configure(req, formData)
     }
-  }
-}
-
-class HelloWorldBuilder@DataBoundConstructor
-(@BeanProperty val name: String) extends BuilderAdapter {
-
-  override def scala_perform(build: FreeStyleBuild, launcher: Launcher, listener: BuildListener): Boolean = {
-    if (getDescriptor.getUseFrench) listener.getLogger.println("Bonjour, " + name + "!") else listener.getLogger.println("Hello, " + name + "!")
-    true
-  }
-
-  override def getDescriptor(): HelloWorldBuilder.DescriptorImpl = {
-    super.getDescriptor.asInstanceOf[HelloWorldBuilder.DescriptorImpl]
   }
 }
