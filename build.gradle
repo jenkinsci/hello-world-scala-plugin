@@ -44,12 +44,42 @@ jenkinsPlugin {
         ]
     }
 
-
-
     dependencies {
         runtime group: 'org.scala-lang', name: 'scala-library', version: "$versions.scala"
         compile group: 'org.scala-lang', name: 'scala-library', version: "$versions.scala"
         runtime group: 'org.scala-lang', name: 'scala-compiler', version: "$versions.scala"
         testCompile group: 'org.scalatest', name: 'scalatest_2.11', version: "$versions.scalatest"
     }
+
+}
+
+task annotate(dependsOn:compileScala, type: Exec)  {
+
+    if (logging.level >= LogLevel.INFO) {
+        args '-verbose'
+    }
+
+    doFirst{
+        args '-proc:only'
+        args '-d'
+        args compileJava.destinationDir
+        args '-classpath'
+        args compileJava.classpath.getAsPath() + java.io.File.pathSeparatorChar + compileJava.destinationDir
+
+        println 'xxx' + compileScala.destinationDir
+
+        fileTree(compileScala.destinationDir).each { File file ->
+            if(file.path.contains('META-INF')) {
+                return
+            }
+            if(!file.path.endsWith('class')) {
+                return
+            }
+            args file.path.minus(compileScala.destinationDir).minus('.class').substring(1).replaceAll(File.separator,'.')
+            println file.path.minus(compileScala.destinationDir).minus('.class').substring(1).replaceAll(File.separator,'.')
+        }
+    }
+
+    executable "javac"
+    
 }
