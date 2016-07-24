@@ -66,8 +66,10 @@ task annotate(dependsOn:compileScala, type: Exec)  {
         args '-classpath'
         args compileJava.classpath.getAsPath() + java.io.File.pathSeparatorChar + compileJava.destinationDir
 
-        println 'xxx' + compileScala.destinationDir
-
+        if (logging.level >= LogLevel.INFO) {
+            args '-verbose'
+        }
+        
         fileTree(compileScala.destinationDir).each { File file ->
             if(file.path.contains('META-INF')) {
                 return
@@ -76,10 +78,10 @@ task annotate(dependsOn:compileScala, type: Exec)  {
                 return
             }
             args file.path.minus(compileScala.destinationDir).minus('.class').substring(1).replaceAll(File.separator,'.')
-            println file.path.minus(compileScala.destinationDir).minus('.class').substring(1).replaceAll(File.separator,'.')
         }
     }
 
     executable "javac"
-    
 }
+
+compileScala.doLast {annotate.execute()}
