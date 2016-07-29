@@ -1,5 +1,6 @@
 package org.jenkinsci.plugins.hw_scala
 
+import hudson.matrix.{MatrixRun}
 import hudson.model.{BuildListener, FreeStyleBuild}
 import hudson.util.FormValidation
 import hudson.{Extension, Launcher}
@@ -37,9 +38,12 @@ class HelloWorldBuilder@DataBoundConstructor
     if (getDescriptor.getUseFrench) listener.getLogger.println("Bonjour, " + name + "!") else listener.getLogger.println("Hello, " + name + "!")
     true
   }
-  //override def getDescriptor(): DescriptorImpl = {
-  //  super.getDescriptor.asInstanceOf[DescriptorImpl]
-  //}
+  
+  override def scala_perform(build: MatrixRun, launcher: Launcher, listener: BuildListener): Boolean = {
+    if (getDescriptor.getUseFrench) listener.getLogger.println("Bonjour, " + name + "!") else listener.getLogger.println("Hello, " + name + "!")
+    true
+  }
+
   override def getDescriptor(): HelloWorldBuilder.DescriptorImpl = {
     super.getDescriptor.asInstanceOf[HelloWorldBuilder.DescriptorImpl]
   }

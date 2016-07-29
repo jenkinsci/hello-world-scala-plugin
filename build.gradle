@@ -69,7 +69,7 @@ task annotate(dependsOn:compileScala, type: Exec)  {
         if (logging.level >= LogLevel.INFO) {
             args '-verbose'
         }
-        
+
         fileTree(compileScala.destinationDir).each { File file ->
             if(file.path.contains('META-INF')) {
                 return
