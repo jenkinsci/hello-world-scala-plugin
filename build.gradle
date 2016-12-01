@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "org.jenkins-ci.plugins"
-version = "0.0.1-SNAPSHOT"    // Or whatever your version is.
+version = "0.0.1"    
 description = "A plugin written in scala"
 
 apply plugin: 'scala'
@@ -24,9 +24,9 @@ sourceSets.main.java.srcDirs = []
 jenkinsPlugin {
     coreVersion = "1.420"                                               // Version of Jenkins core this plugin depends on.
     displayName = "Hello World plugin built with Scala"                 // Human-readable name of plugin.
-    url = "http://wiki.jenkins-ci.org/display/JENKINS/hello-world-scala-plugin"   // URL for plugin on Jenkins wiki or elsewhere.
-    gitHubUrl = "https://github.com/jenkinsci/hello-world-scala-plugin" // Plugin URL on GitHub. Optional.
-    shortName = "hello-world-scala"                                    // Plugin ID, defaults to the project name without trailing '-plugin'
+    url = "http://wiki.jenkins-ci.org/display/JENKINS/scala-hello-world-plugin"   // URL for plugin on Jenkins wiki or elsewhere.
+    gitHubUrl = "https://wiki.jenkins-ci.org/display/JENKINS/Scala+Hello+World+Plugin" // Plugin URL on GitHub. Optional.
+    shortName = "scala-hello-world"                                   // Plugin ID, defaults to the project name without trailing '-plugin'
 
     // The developers section is optional, and corresponds to the POM developers section.
     developers {
