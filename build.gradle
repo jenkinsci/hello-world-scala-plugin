@@ -1,4 +1,4 @@
-
+import java.util.regex.Matcher
 
 plugins {
     id "org.jenkins-ci.jpi" version "0.16.0"
@@ -77,7 +77,7 @@ task annotate(dependsOn:compileScala, type: Exec)  {
             if(!file.path.endsWith('class')) {
                 return
             }
-            args file.path.minus(compileScala.destinationDir).minus('.class').substring(1).replaceAll(File.separator,'.')
+            args file.path.minus(compileScala.destinationDir).minus('.class').substring(1).replaceAll(Matcher.quoteReplacement(File.separator),'.')
         }
     }
 
