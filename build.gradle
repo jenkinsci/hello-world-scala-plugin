@@ -85,4 +85,4 @@ task annotate(dependsOn:compileScala, type: Exec)  {
     executable "javac"
 }
 
-compileScala.doLast {annotate.execute()}
+compileScala.doLast {annotate.exec()}
