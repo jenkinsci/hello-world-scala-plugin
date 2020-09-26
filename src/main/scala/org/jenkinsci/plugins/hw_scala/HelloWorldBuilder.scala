@@ -1,6 +1,6 @@
 package org.jenkinsci.plugins.hw_scala
 
-import hudson.matrix.{MatrixRun}
+import hudson.matrix.MatrixRun
 import hudson.model.{BuildListener, FreeStyleBuild}
 import hudson.util.FormValidation
 import hudson.{Extension, Launcher}
@@ -23,7 +23,7 @@ object HelloWorldBuilder {
       FormValidation.ok()
     }
 
-    def getDisplayName(): String = "Say hello world"
+    override def getDisplayName: String = "Say hello world"
 
     override def configure(req: StaplerRequest, formData: JSONObject): Boolean = {
       useFrench = formData.getBoolean("useFrench")
@@ -35,12 +35,12 @@ object HelloWorldBuilder {
 class HelloWorldBuilder@DataBoundConstructor
 (@BeanProperty val name: String) extends BuilderAdapter {
   override def scala_perform(build: FreeStyleBuild, launcher: Launcher, listener: BuildListener): Boolean = {
-    if (getDescriptor.getUseFrench) listener.getLogger.println("Bonjour, " + name + "!") else listener.getLogger.println("Hello, " + name + "!")
+    if (getDescriptor().getUseFrench) listener.getLogger.println("Bonjour, " + name + "!") else listener.getLogger.println("Hello, " + name + "!")
     true
   }
   
   override def scala_perform(build: MatrixRun, launcher: Launcher, listener: BuildListener): Boolean = {
-    if (getDescriptor.getUseFrench) listener.getLogger.println("Bonjour, " + name + "!") else listener.getLogger.println("Hello, " + name + "!")
+    if (getDescriptor().getUseFrench) listener.getLogger.println("Bonjour, " + name + "!") else listener.getLogger.println("Hello, " + name + "!")
     true
   }
 
